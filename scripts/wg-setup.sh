@@ -80,7 +80,9 @@ fw_up() {
   local PEER
   if [[ -s $SSH_PEERS ]]; then
     iptables -N WG_SSH 2>/dev/null || iptables -F WG_SSH
-    for PEER in $(cat "$SSH_PEERS"); do iptables -A WG_SSH -s "$PEER" -j ACCEPT; done
+    while read -r PEER || [[ -n $PEER ]]; do
+      [[ -n $PEER ]] && iptables -A WG_SSH -s "$PEER" -j ACCEPT
+    done < "$SSH_PEERS"
     iptables -A WG_SSH -p tcp -j REJECT --reject-with tcp-reset
     iptables -I INPUT 1 -i wg0 -p tcp --dport 22 -j WG_SSH
   fi
