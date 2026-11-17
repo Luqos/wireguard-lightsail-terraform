@@ -1,0 +1,5 @@
+# Copy to terraform.tfvars and adjust.
+region    = "ap-southeast-5"
+name      = "wg-vpn"
+bundle_id = "nano_3_1"   # USD 5 IPv4 plan in Malaysia (512 MB RAM, 512 GB transfer)
+# ssh_cidrs = ["203.0.113.7/32"]   # your home IP, optional

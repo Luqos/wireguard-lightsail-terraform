@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  scripts:
+    name: Shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ShellCheck wg-setup.sh
+        run: shellcheck scripts/wg-setup.sh
+
+      - name: Render launcher and reject bash-only syntax
+        run: python3 ci/check_launcher.py "$RUNNER_TEMP/user_data.sh"
+
+      - name: Parse rendered launcher with dash (Lightsail's /bin/sh)
+        run: |
+          sudo apt-get install -y -qq dash >/dev/null
+          dash -n "$RUNNER_TEMP/user_data.sh"
+
+  monitor:
+    name: Monitor app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Unit tests (standard library only, no AWS)
+        run: python -m unittest discover -s monitor -v
+
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.x"
+
+      - name: terraform fmt
+        run: terraform fmt -check -recursive -diff
+
+      - name: terraform init (no backend, no AWS)
+        run: terraform init -backend=false -input=false
+
+      - name: terraform validate
+        run: terraform validate

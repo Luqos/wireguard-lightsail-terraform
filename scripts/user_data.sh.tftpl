@@ -1,0 +1,11 @@
+# Lightsail first-boot script, rendered by Terraform. Output: /var/log/cloud-init-output.log
+# Lightsail merges this into its own script, which runs under /bin/sh (not bash),
+# so this file must stay POSIX: no pipefail, no bash-only syntax.
+set -eu
+
+cat > /usr/local/sbin/wg-setup <<'WGEOF'
+${wg_setup}
+WGEOF
+chmod 700 /usr/local/sbin/wg-setup
+
+bash /usr/local/sbin/wg-setup install

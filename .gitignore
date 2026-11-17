@@ -1,0 +1,8 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.conf
+__pycache__/
+*.local.md
+terraform.tfstate.d/

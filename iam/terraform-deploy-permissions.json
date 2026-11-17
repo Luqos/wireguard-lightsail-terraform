@@ -1,0 +1,85 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LightsailWireGuardOnly",
+      "Effect": "Allow",
+      "Action": [
+        "lightsail:CreateInstances",
+        "lightsail:DeleteInstance",
+        "lightsail:GetInstance",
+        "lightsail:GetInstances",
+        "lightsail:GetInstanceState",
+        "lightsail:SetIpAddressType",
+        "lightsail:AllocateStaticIp",
+        "lightsail:ReleaseStaticIp",
+        "lightsail:GetStaticIp",
+        "lightsail:GetStaticIps",
+        "lightsail:AttachStaticIp",
+        "lightsail:DetachStaticIp",
+        "lightsail:PutInstancePublicPorts",
+        "lightsail:OpenInstancePublicPorts",
+        "lightsail:CloseInstancePublicPorts",
+        "lightsail:GetInstancePortStates",
+        "lightsail:TagResource",
+        "lightsail:UntagResource",
+        "lightsail:GetOperation",
+        "lightsail:GetOperations",
+        "lightsail:GetBundles",
+        "lightsail:GetBlueprints",
+        "lightsail:GetRegions",
+        "lightsail:PutAlarm",
+        "lightsail:GetAlarms",
+        "lightsail:DeleteAlarm"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "ap-southeast-5"
+        }
+      }
+    },
+    {
+      "Sid": "CloudControlForAwsccAlarm",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateResource",
+        "cloudformation:GetResource",
+        "cloudformation:UpdateResource",
+        "cloudformation:DeleteResource",
+        "cloudformation:GetResourceRequestStatus"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "ap-southeast-5"
+        }
+      }
+    },
+    {
+      "Sid": "StateBucketList",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::STATE_BUCKET"
+    },
+    {
+      "Sid": "StateFile",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::STATE_BUCKET/env:/my/wireguard-vpn/terraform.tfstate"
+    },
+    {
+      "Sid": "LockFile",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::STATE_BUCKET/env:/my/wireguard-vpn/terraform.tfstate.tflock"
+    }
+  ]
+}

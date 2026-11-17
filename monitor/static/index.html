@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WireGuard Monitor</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>WireGuard Monitor</h1>
+      <span id="refreshed" class="muted"></span>
+    </div>
+    <nav id="tabs" aria-label="Sections">
+      <button data-view="users" class="tab">Users</button>
+      <button data-view="servers" class="tab">Servers</button>
+      <button data-view="setup" class="tab">Setup</button>
+    </nav>
+    <button id="refresh" class="btn">Refresh</button>
+  </header>
+  <div id="banner" hidden></div>
+  <main id="main"></main>
+  <dialog id="dialog"></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
